@@ -67,9 +67,8 @@ public class Philosopher extends Thread {
      * Метод "подумать"
      */
     private void think() throws InterruptedException{
-        if (!isThinking) // если не думает сейчас, то сообщает о том, что начинает
-            System.out.println(this.getName() + " задумался...");
         isThinking = true;
+        System.out.println(this.getName() + " задумался...");
         sleep((long) (Math.random() * 5000));
         canEat = true; // подумал, теперь может и поесть (не ел только что)
     }
