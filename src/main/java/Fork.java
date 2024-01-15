@@ -1,6 +1,6 @@
 public class Fork {
     private String name;
-    private boolean state;
+    private volatile boolean state = true; // true = доступна
 
     public Fork(String name){
         this.name = name;

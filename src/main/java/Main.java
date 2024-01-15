@@ -14,11 +14,13 @@ public class Main {
         Fork fork4 = new Fork("4");
         Fork fork5 = new Fork("5");
 
-        Philosopher ph1 = new Philosopher("Phi_1", fork1, fork2);
-        Philosopher ph2 = new Philosopher("Phi_2", fork2, fork3);
-        Philosopher ph3 = new Philosopher("Phi_3", fork3, fork4);
-        Philosopher ph4 = new Philosopher("Phi_4", fork4, fork5);
-        Philosopher ph5 = new Philosopher("Phi_5", fork5, fork1);
+        int eatCount = 3; // кол-во приемов пищи
+
+        Thread ph1 = new Philosopher("Phi_1", fork1, fork2, eatCount);
+        Thread ph2 = new Philosopher("Phi_2", fork2, fork3, eatCount);
+        Thread ph3 = new Philosopher("Phi_3", fork3, fork4, eatCount);
+        Thread ph4 = new Philosopher("Phi_4", fork4, fork5, eatCount);
+        Thread ph5 = new Philosopher("Phi_5", fork5, fork1, eatCount);
 
         ph1.start();
         ph2.start();

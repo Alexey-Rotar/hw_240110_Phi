@@ -4,21 +4,22 @@ public class Philosopher extends Thread {
     private String name;
     private Fork leftFork;
     private Fork rightFork;
-    boolean isThinking;
-    boolean isEating;
-    int count = 2;
+    private int eatCount;
+    private boolean canEat = true; // true = может есть сейчас, false = не может
+    private boolean isThinking = false; // true = думает сейчас, false = нет
 
-    public Philosopher(String name, Fork leftFork, Fork rightFork){
+    public Philosopher(String name, Fork leftFork, Fork rightFork, int eatCount){
         this.name = name;
         this.leftFork = leftFork;
         this.rightFork = rightFork;
+        this.eatCount = eatCount;
     }
 
     @Override
     public void run(){
         try {
-            while (count > 0){
-                if (!leftFork.getState() && !rightFork.getState())
+            while (eatCount > 0){
+                if (leftFork.getState() && rightFork.getState() && canEat)
                     eat();
                 else
                     think();
@@ -28,32 +29,32 @@ public class Philosopher extends Thread {
         }
     }
 
-    public void eat() throws InterruptedException{
-        leftFork.setState(true);
-        rightFork.setState(true);
-        isEating = true;
-        System.out.println(name + " ест вилками " + leftFork.getName() +  " и " + rightFork.getName());
+    private void eat() throws InterruptedException{
+        isThinking = false;
+        takeForks();
         Thread.sleep((long) (Math.random() * 1000));
-        count--;
-        leftFork.setState(false);
-        rightFork.setState(false);
-        System.out.println(name + " поел, вилки " + leftFork.getName() +  " и " + rightFork.getName() + " освободились" );
-        isEating = false;
+        eatCount--;
+        canEat = false; // только что поел
+        putForks();
     }
 
-    public void think() throws InterruptedException{
-        if (isEating){
-            isThinking = false;
-        }
-        if (!isThinking && !isEating){
-            System.out.println(name + " думает...");
-            isThinking = true;
-        }
-        if (!isThinking){
-            isThinking = true;
-        }
+    private void takeForks(){
+        leftFork.setState(false); // вилка занимается
+        rightFork.setState(false); // вилка занимается
+        System.out.println(name + " начал есть вилками " + leftFork.getName() +  " и " + rightFork.getName());
+    }
 
-        //System.out.println(name + " закончил думать");
-        //System.out.println(name + " думает...");
+    private void putForks(){
+        leftFork.setState(true); // вилка освобожается
+        rightFork.setState(true); // вилка освобожается
+        System.out.println(name + " поел, вилки " + leftFork.getName() +  " и " + rightFork.getName() + " освободились" );
+    }
+
+    private void think() throws InterruptedException{
+        if (!isThinking) // если не думает сейчас, сообщает, что начинает
+            System.out.println(name + " задумался...");
+        isThinking = true;
+        Thread.sleep((long) (Math.random() * 7000));
+        canEat = true; // не ел только что
     }
 }
