@@ -8,19 +8,22 @@
 
 public class Main {
     public static void main(String[] args) {
+
+        int EAT_COUNT = 3; // кол-во приемов пищи
+
         Fork fork1 = new Fork("1");
         Fork fork2 = new Fork("2");
         Fork fork3 = new Fork("3");
         Fork fork4 = new Fork("4");
         Fork fork5 = new Fork("5");
 
-        int eatCount = 3; // кол-во приемов пищи
+        Pair pair = new Pair();
 
-        Thread ph1 = new Philosopher("Phi_1", fork1, fork2, eatCount);
-        Thread ph2 = new Philosopher("Phi_2", fork2, fork3, eatCount);
-        Thread ph3 = new Philosopher("Phi_3", fork3, fork4, eatCount);
-        Thread ph4 = new Philosopher("Phi_4", fork4, fork5, eatCount);
-        Thread ph5 = new Philosopher("Phi_5", fork5, fork1, eatCount);
+        Philosopher ph1 = new Philosopher("Phi_1", pair, fork1, fork2, EAT_COUNT);
+        Philosopher ph2 = new Philosopher("Phi_2", pair, fork2, fork3, EAT_COUNT);
+        Philosopher ph3 = new Philosopher("Phi_3", pair, fork3, fork4, EAT_COUNT);
+        Philosopher ph4 = new Philosopher("Phi_4", pair, fork4, fork5, EAT_COUNT);
+        Philosopher ph5 = new Philosopher("Phi_5", pair, fork5, fork1, EAT_COUNT);
 
         ph1.start();
         ph2.start();
@@ -30,4 +33,3 @@ public class Main {
 
     }
 }
-
