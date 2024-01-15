@@ -20,7 +20,7 @@ public class Philosopher extends Thread {
     public void run(){
         while (eatCount > 0){
             try {
-                if (canEat){ // если может сейчас есть
+                if (canEat){ // если может сейчас есть (не ел только что)
                     synchronized(forkPair){ // пытается занять общий ресурс (пара вилок)
                         forkPair.setForks(leftFork, rightFork); // берется соответсвующая пара вилок
                         eat();
@@ -41,7 +41,7 @@ public class Philosopher extends Thread {
     private void eat() throws InterruptedException{
         isThinking = false; // перестаёт думать
         takeForks(); // берёт вилки
-        Thread.sleep((long) (Math.random() * 2000)); // ест какое-то время
+        sleep((long) (Math.random() * 2000)); // ест какое-то время
         eatCount--;
         canEat = false; // только что поел
         putForks(); // возвращает вилки
@@ -70,8 +70,7 @@ public class Philosopher extends Thread {
         if (!isThinking) // если не думает сейчас, то сообщает о том, что начинает
             System.out.println(this.getName() + " задумался...");
         isThinking = true;
-        Thread.sleep((long) (Math.random() * 5000));
-        isThinking = false;
+        sleep((long) (Math.random() * 5000));
         canEat = true; // подумал, теперь может и поесть (не ел только что)
     }
 }
