@@ -1,5 +1,5 @@
 public class Fork {
-    private String name;
+    private final String name;
     private volatile boolean state = true; // true = доступна
 
     public Fork(String name){
@@ -8,10 +8,6 @@ public class Fork {
 
     public void setState(boolean state){
         this.state = state;
-    }
-
-    public boolean getState(){
-        return state;
     }
 
     public String getName(){

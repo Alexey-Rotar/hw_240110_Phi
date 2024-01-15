@@ -17,19 +17,18 @@ public class Main {
         Fork fork4 = new Fork("4");
         Fork fork5 = new Fork("5");
 
-        Pair pair = new Pair();
+        ForkPair forkPair = new ForkPair(); // общий ресурс
 
-        Philosopher ph1 = new Philosopher("Phi_1", pair, fork1, fork2, EAT_COUNT);
-        Philosopher ph2 = new Philosopher("Phi_2", pair, fork2, fork3, EAT_COUNT);
-        Philosopher ph3 = new Philosopher("Phi_3", pair, fork3, fork4, EAT_COUNT);
-        Philosopher ph4 = new Philosopher("Phi_4", pair, fork4, fork5, EAT_COUNT);
-        Philosopher ph5 = new Philosopher("Phi_5", pair, fork5, fork1, EAT_COUNT);
+        Philosopher ph1 = new Philosopher("Phi-1", forkPair, fork1, fork2, EAT_COUNT);
+        Philosopher ph2 = new Philosopher("Phi-2", forkPair, fork2, fork3, EAT_COUNT);
+        Philosopher ph3 = new Philosopher("Phi-3", forkPair, fork3, fork4, EAT_COUNT);
+        Philosopher ph4 = new Philosopher("Phi-4", forkPair, fork4, fork5, EAT_COUNT);
+        Philosopher ph5 = new Philosopher("Phi-5", forkPair, fork5, fork1, EAT_COUNT);
 
         ph1.start();
         ph2.start();
         ph3.start();
         ph4.start();
         ph5.start();
-
     }
 }

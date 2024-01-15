@@ -1,16 +1,16 @@
 import java.lang.Math;
 
 public class Philosopher extends Thread {
-    private Pair pair;
-    private Fork leftFork;
-    private Fork rightFork;
+    private final ForkPair forkPair;
+    private final Fork leftFork;
+    private final Fork rightFork;
     private int eatCount;
     private boolean canEat = true; // true = может есть сейчас, false = не может
     private boolean isThinking = false; // true = думает сейчас, false = нет
 
-    public Philosopher(String name, Pair pair, Fork leftFork, Fork rightFork, int eatCount){
+    public Philosopher(String name, ForkPair forkPair, Fork leftFork, Fork rightFork, int eatCount){
         super(name);
-        this.pair = pair;
+        this.forkPair = forkPair;
         this.leftFork = leftFork;
         this.rightFork = rightFork;
         this.eatCount = eatCount;
@@ -21,8 +21,8 @@ public class Philosopher extends Thread {
         while (eatCount > 0){
             try {
                 if (canEat){ // если может сейчас есть
-                    synchronized(pair){ // занимается общий ресурс = пара вилок
-                        pair.setForks(leftFork, rightFork); // берется одновременно пара вилок
+                    synchronized(forkPair){ // пытается занять общий ресурс (пара вилок)
+                        forkPair.setForks(leftFork, rightFork); // берется соответсвующая пара вилок
                         eat();
                     }
                 }
@@ -32,9 +32,12 @@ public class Philosopher extends Thread {
                 throw new RuntimeException(e);
             }
         }
-        System.out.println(this.getName() + " надумался и наелся!");
+        System.out.println(this.getName() + " всё!");
     }
 
+    /**
+     * Метод "поесть"
+     */
     private void eat() throws InterruptedException{
         isThinking = false; // перестаёт думать
         takeForks(); // берёт вилки
@@ -44,21 +47,31 @@ public class Philosopher extends Thread {
         putForks(); // возвращает вилки
     }
 
+    /**
+     * Метод "взять вилки"
+     */
     private void takeForks(){
-        pair.busy(); // вилки занимаются
+        forkPair.busy(); // вилки занимаются
         System.out.println(this.getName() + " принялся есть вилками " + leftFork.getName() +  " и " + rightFork.getName());
     }
 
+    /**
+     * Метод "положить вилки"
+     */
     private void putForks(){
-        pair.free(); // вилки освобожаются
+        forkPair.free(); // вилки освобожаются
         System.out.println(this.getName() + " поел, вилки " + leftFork.getName() +  " и " + rightFork.getName() + " освободились" );
     }
 
+    /**
+     * Метод "подумать"
+     */
     private void think() throws InterruptedException{
         if (!isThinking) // если не думает сейчас, то сообщает о том, что начинает
             System.out.println(this.getName() + " задумался...");
         isThinking = true;
-        Thread.sleep((long) (Math.random() * 1000));
-        canEat = true; // теперь может поесть = не ел только что
+        Thread.sleep((long) (Math.random() * 5000));
+        isThinking = false;
+        canEat = true; // подумал, теперь может и поесть (не ел только что)
     }
 }
